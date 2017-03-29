@@ -1,30 +1,30 @@
-﻿// Server
-var http = require("http");
-var express = require("express");
-var app = express(); // Our application singleton
+﻿Startup();
 
-// Authentication
-var session = require("express-session");
-var passport = require("passport");
-var bodyParser = require("body-parser");
-var Issuer = require("openid-client").Issuer;
-var Strategy = require("openid-client").Strategy;
+async function Startup() {
+    // Server
+    const http = require("http");
+    const express = require("express");
+    const app = express(); // Our application singleton
 
-// Discover issuer and continue initialization
-var discoverPromise = Issuer.discover("http://localhost/authsrv/oidc")
-    .catch(function (info) {
+    // Authentication
+    const session = require("express-session");
+    const passport = require("passport");
+    const bodyParser = require("body-parser");
+    const Issuer = require("openid-client").Issuer;
+    const Strategy = require("openid-client").Strategy;
+
+    let idsrvIssuer;
+
+    try {
+        // Discover issuer and continue initialization
+        idsrvIssuer = await Issuer.discover("http://localhost/authsrv/oidc");
+    } catch (err) {
         console.log('Failed to discover issuer');
-        console.log(info);
-    })
-    .then(function (issuer) {
-        OnIssuerDiscovered(issuer);
-    });
-
-// This cb is called when the issuer has been successfully discovered
-function OnIssuerDiscovered(issuer) {
+        console.log(err);
+    }
 
     // Setup our client
-    var client = new issuer.Client({
+    const client = new idsrvIssuer.Client({
         client_id: "browserclient",
         client_secret: "4C701024-0770-4794-B93D-52B5EB6487A0"
     });
@@ -38,7 +38,7 @@ function OnIssuerDiscovered(issuer) {
     }
 
     // Initialize passport strategy
-    var oidcStrategy = new Strategy({ client, params }, (tokenset, userinfo, done) => {
+    const oidcStrategy = new Strategy({ client, params }, (tokenset, userinfo, done) => {
         console.log('tokenset', tokenset);
         console.log('access_token', tokenset.access_token);
         console.log('id_token', tokenset.id_token);
@@ -72,7 +72,7 @@ function OnIssuerDiscovered(issuer) {
             successRedirect: "/node",
             failureRedirect: "/node/login",
         }
-    ));
+        ));
 
     // Root
     app.get("/node", passport.authenticate("oidc"), function (request, response) {
@@ -83,5 +83,4 @@ function OnIssuerDiscovered(issuer) {
     server.listen(5000);
 
     console.log("Server listening to port 5000...");
-
 }
