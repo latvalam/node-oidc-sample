@@ -1,0 +1,20 @@
+{
+  "name": "oidc-poc",
+  "version": "0.1.0",
+  "description": "OpenIdConnect Proof-Of-Concept",
+  "main": "server.js",
+  "author": {
+    "name": "latvama1"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "openid-client": "^1.6.4",
+    "passport": "^0.3.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "gulp-nodemon": "^2.2.1"
+  }
+}
