@@ -15,9 +15,16 @@ async function Startup() {
 
     let idsrvIssuer;
 
+    Issuer.defaultHttpOptions = {
+        timeout: 4000,
+        retries: 2,
+        followRedirect: false
+    };
+
     try {
-        // Discover issuer and continue initialization
-        idsrvIssuer = await Issuer.discover('http://localhost/authsrv');
+        // Discover issuer
+        console.log('Discovering issuer...');
+        idsrvIssuer = await Issuer.discover('http://localhost:5001');
     } catch (err) {
         console.log('Failed to discover issuer');
         console.log(err);
@@ -34,7 +41,7 @@ async function Startup() {
         redirect_uri: 'http://localhost:5000/node/signin-oidc',
         response_type: 'code id_token',
         response_mode: 'form_post',
-        acr_values: 'tenant:default clienthost:http://localhost:5000'
+        acr_values: 'tenant:default clienthost:http://localhost:5000 idp:opuscapita',
     }
 
     // Passport user serialization
@@ -43,9 +50,14 @@ async function Startup() {
         done(null, user);
     });
 
-    passport.deserializeUser(function (obj, done) {
-        console.log("deserializing " + obj);
-        done(null, obj);
+    passport.deserializeUser(function (id, done) {
+        console.log("deserializing " + id);
+
+        let user = {
+            id: id
+        };
+
+        done(null, user);
     });
 
     // Initialize passport strategy
@@ -57,11 +69,10 @@ async function Startup() {
             console.log('claims', tokenset.claims);
 
             let user = {
-                id: tokenset.claims.sub,
-                claims: tokenset.claims
+                id: tokenset.claims.sub
             };
 
-            done(null, user);
+            return done(null, user);
         }
     ));
 
@@ -97,7 +108,9 @@ async function Startup() {
                 if (err) {
                     return next(err);
                 }
-                return res.redirect('/node');
+
+                return res.send(200, { success: true, message: 'successfully authenticated', user: user });
+                //return res.redirect('/node');
             });
         })(req, res, next);
     });
