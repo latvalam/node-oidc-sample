@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="controllers\" />
+    <Folder Include="typings\" />
+    <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\gulp-nodemon\" />
     <Folder Include="typings\globals\node\" />
     <Folder Include="typings\globals\passport\" />
