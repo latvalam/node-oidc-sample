@@ -39,17 +39,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="controllers\" />
-    <Folder Include="typings\" />
-    <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\gulp-nodemon\" />
-    <Folder Include="typings\globals\gulp\" />
     <Folder Include="typings\globals\node\" />
     <Folder Include="typings\globals\passport\" />
     <Folder Include="typings\globals\underscore\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="typings\globals\gulp-nodemon\index.d.ts" />
-    <TypeScriptCompile Include="typings\globals\gulp\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\passport\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\underscore\index.d.ts" />

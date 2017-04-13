@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OidcAuth", "OidcAuth.njsproj", "{E5E93F5E-CA7A-4026-840E-0EA62EE021CC}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "node-oidc-sample", "node-oidc-sample.njsproj", "{E5E93F5E-CA7A-4026-840E-0EA62EE021CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

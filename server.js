@@ -4,7 +4,7 @@ async function Startup() {
     // Server
     const http = require('http');
     const express = require('express');
-    const app = express(); // Our application singleton
+    const app = express();
 
     // Authentication
     const passport = require('passport');
@@ -31,7 +31,7 @@ async function Startup() {
         console.log(err);
     }
 
-    // Setup our client
+    // Setup the oidc client
     const client = new idsrvIssuer.Client({
         client_id: 'browserclient',
         client_secret: '4C701024-0770-4794-B93D-52B5EB6487A0'
@@ -42,10 +42,10 @@ async function Startup() {
         redirect_uri: 'http://localhost:5000/node/signin-oidc',
         response_type: 'code id_token',
         response_mode: 'form_post',
-        acr_values: 'tenant:default clienthost:http://localhost:5000',// idp:opuscapita',
+        acr_values: 'tenant:default clienthost:http://localhost:5000',
     }
 
-    // Passport user serialization
+    // Passport setup
     passport.serializeUser(function (user, done) {
         done(null, user);
     });
@@ -54,7 +54,7 @@ async function Startup() {
         done(null, obj);
     });
 
-    // Initialize passport strategy
+    // Passport strategy middleware
     passport.use('oidc',
         new Strategy({ client, params }, (tokenset, done) => {
             console.log('User ' + tokenset.claims.sub + ' successfully logged in');
@@ -137,7 +137,7 @@ async function Startup() {
         if (request.user) {
             next();
         } else {
-            response.redirect('/login');
+            response.redirect('/node/login');
         }
     };
 
